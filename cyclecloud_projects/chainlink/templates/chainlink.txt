@@ -6,8 +6,8 @@
 Order = 10
 
     [[parameters Cloud Service Provider Configuration]]
-    Description = Configure the Cloud Provider account options.
-    Order = 10
+      Description = Configure the Cloud Provider account options.
+      Order = 10
 
         [[[parameter CloudProvider]]]
         Label = Cloud Provider
@@ -23,13 +23,12 @@ Order = 10
         Description = Deployment Location
         ParameterType = Cloud.Region
 
-
 [parameters Cluster Software]
 Order = 20
 
     [[parameters Software]]
-    Description = "Specify the scheduling software, and base OS installed on all nodes."
-    Order = 10
+      Description = "Specify the scheduling software, and base OS installed on all nodes."
+      Order = 10
 
         [[[parameter ImageName]]]
         Label = Base OS
@@ -44,6 +43,7 @@ Order = 20
         Description = "If set, use a custom common chef repo version."
         Hidden = true
 
+        ### BEGIN FMI Custom Parameters ###
         [[[parameter HomeExport]]]
         Required = true
 
@@ -53,7 +53,7 @@ Order = 20
         [[[parameter HSQExport]]]
         Required = true
 
-  [[[parameter Rpc_Slots]]]
+        [[[parameter Rpc_Slots]]]
         DefaultValue = 128
         Required = true
 
@@ -94,9 +94,9 @@ Order = 20
         Description = "The location of the GridEngine install"
         DefaultValue = /sched/ge/ge-8.5.0
 
-    [[parameters Node Access]]
-    Description = "Specify the credentials required for access to the node.  The Keypair Path specifies the path on local machines for cyclecloud CLI access."
-    Order = 20
+        [[parameters Node Access]]
+        Description = "Specify the credentials required for access to the node.  The Keypair Path specifies the path on local machines for cyclecloud CLI access."
+        Order = 20
 
         [[[parameter awsKeypair]]]
         Label = AWS Keypair
@@ -111,6 +111,8 @@ Order = 20
         Description = The path to the keypair
         DefaultValue = ~/.ssh/FMI-Systems-Team.pem
         Required = True
+
+        ### END FMI Custom Parameters ###
 
         [[[parameter Username]]]
         Label = Username
@@ -156,9 +158,9 @@ Order = 30
         Config.IntegerOnly = true
 
         [[[parameter MasterSlotCount]]]
-  DefaultValue = 0
+	      DefaultValue = 0
 
-       [[[parameter PersistentMachineType]]]
+        [[[parameter PersistentMachineType]]]
         Label = Persistent Exec Type
         Description = The machine type for the persistent execute nodes
         ParameterType = Cloud.MachineType
@@ -185,13 +187,10 @@ Order = 30
             Azure = Standard_A16
             GCP = n1-standard-16
 
-
-
         [[[parameter ExecuteInstanceProfileArn]]]
         Label = Execute IAM Role
         Description = The instance profile ARN for the execute nodes
         DefaultValue = arn:aws:iam::852372144783:instance-profile/cyclecloud
-
 
     [[parameters Auto-Scaling]]
     Description = "The cluster can autoscale to the workload, adding execute hosts as jobs are queued. To enable this check the box below and choose the initial and maximum core counts for the cluster"
@@ -252,7 +251,6 @@ Order = 30
         Config.IntegerOnly = true
         Hidden = true
 
-
     [[parameters AWS Spot Market]]
     Description = "To use spot instances check the box and enter a bid price below, otherwise on-demand instances will be used"
     Conditions.Excluded := CloudProvider !== "AWS"
@@ -282,7 +280,6 @@ Order = 30
         Description = How much to bid for 1 HighMem instance
         Conditions.Excluded := awsUseSpot isnt true
 
-
     [[parameters GCP Preemptible Instances]]
     Description = "To use premptible instances check the box, otherwise regular instances will be used"
     Conditions.Excluded := CloudProvider !== "GCP"
@@ -305,7 +302,6 @@ Order = 40
         DefaultValue = false
         Widget.Plugin = pico.form.BooleanCheckBox
         Widget.Label = Allow cloud instances to report back their state
-
 
     [[parameters AWS]]
     Order = 20
@@ -335,7 +331,6 @@ Order = 40
         Description = "The security group ID(s) to use when in a VPC environment. Can be comma-separated list for multiple security groups. eg: sg-a0000001, sg-a0000002."
         DefaultValue := { "sg-948b34eb" }
         ParameterType = AWS.SecurityGroupList
-
 
     [[parameters GCP Network]]
     Order = 30
@@ -370,14 +365,15 @@ FormLayout = selectionpanel
 Category = FMI
 IconUrl = static/fmi_icon/fmi_icon.png
 
-# Enable/disable autoscaling
-# The scheduler load will determine the number of execute machines that are started, machines will terminate themselves if they are idle
-# and approaching a billing cycle.
-Autoscale = $Autoscale
+    # Enable/disable autoscaling
+    # The scheduler load will determine the number of execute machines that are started, machines will terminate themselves if they are idle
+    # and approaching a billing cycle.
+    Autoscale = $Autoscale
 
     # defines default values used for all nodes. This is inherited automatically by all nodes.
     # You can create other nodes like this by adding Abstract = true to them and adding
     # Extends = foo to the nodes that should inherit the definitions from foo.
+
     [[node defaults]]
     Credentials = $Credentials
 
@@ -404,19 +400,19 @@ Autoscale = $Autoscale
         # You can specify Chef attributes using dot notation if needed. For example, you
         # can use it to change the default CycleServer admin password (defaults to cluster name):
         cyclecloud.cluster.user.name = cluster.user
-        # cyclecloud.cluster.user.password = abc;123
+        #cyclecloud.cluster.user.password = abc;123
         cyclecloud.cluster.user.uid = 55555
         cyclecloud.cluster.user.gid = 55555
         fmi.sysctl.rpc_slots = $Rpc_Slots
 
         # Simulate DNS for now
-#       cyclecloud.hosts.standalone_dns.enabled = true
-#       cyclecloud.hosts.standalone_dns.suffix=corp.local
+        #cyclecloud.hosts.standalone_dns.enabled = true
+        #cyclecloud.hosts.standalone_dns.suffix=corp.local
         cyclecloud.hosts.simple_vpc_dns.enabled = true
         cyclecloud.hosts.simple_vpc_dns.suffix=corp.local
 
-        # NTP Config
-        cyclecloud.ntp.servers = ntp.corp.local, ntp01.corp.local, ntp02.corp.local
+      	# NTP Config
+      	ntp.servers = ntp.corp.local, ntp01.corp.local, ntp02.corp.local
 
         # No need for fail2ban in vpc
         cyclecloud.fail2ban.enabled = false
@@ -438,7 +434,6 @@ Autoscale = $Autoscale
         shell = /bin/bash
         domain = corp
 
-
         [[[configuration cyclecloud.mounts.compbio]]]
         type = nfs
         mountpoint = /compbio
@@ -454,10 +449,10 @@ Autoscale = $Autoscale
         mountpoint = /home
         export_path = $HomeExport
         address = $CloudStorageEndpoint
-      	options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
-      	owner = root
-      	group = compbio
-      	permissions = "0755"
+        options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
+        owner = root
+        group = compbio
+        permissions = "0755"
 
         [[[configuration cyclecloud.mounts.hsq]]]
         type = nfs
@@ -484,6 +479,14 @@ Autoscale = $Autoscale
       	Spec=$ChainlinkEnv
       	Version=$ChainlinkVersion
 
+        [[[cluster-init default]]]
+        Project=Chainlink
+        Spec=default
+        Version=$ChainlinkVersion
+        [[[cluster-init env]]]
+        Project=Chainlink
+        Spec=$ChainlinkEnv
+        Version=$ChainlinkVersion
 
     [[node master]]
     MachineType = $MasterMachineType
@@ -491,12 +494,18 @@ Autoscale = $Autoscale
     AWS.InstanceProfileArn = $MasterInstanceProfileArn
     AWS.RootDeviceSize=$MasterRootDeviceSize
 
+    # FMI AWS Tagging
+    tags.Description = $CycleClusterName
+    tags.Team = Compbio
+    tags.Application = Analysis Pipeline
+    tags.Business Unit = Compbio
+
     SubnetId = ${IfThenElse(CloudProvider==="Azure", azureMasterSubnetId, awsMasterSubnetId)}
     SecurityGroups = $awsMasterSecurityGroups
 
         [[[configuration]]]
         # This is the Chef runlist to use for the node, to customize this add customized recipes and/or roles
-        run_list = recipe[createusers::move_localuser_home], recipe[cyclecloud], role[chainlink_master_role]
+        run_list = recipe[createusers::move_localuser_home], recipe[cyclecloud], recipe[ntp_patch::time], role[chainlink_master_role]
 
         gridengine.slots = $MasterSlotCount
 
@@ -516,10 +525,15 @@ Autoscale = $Autoscale
         PrivatePort = 8652
         PublicPort = 8652
 
-
     [[nodearray execute]]
     MachineType = $ExecuteMachineType
     AWS.InstanceProfileArn = $ExecuteInstanceProfileArn
+
+    # FMI AWS Tagging
+    tags.Description = $CycleClusterName
+    tags.Team = Compbio
+    tags.Application = Analysis Pipeline
+    tags.Business Unit = Compbio
 
     # The initial number of cores of this type to start when the cluster starts
     InitialCoreCount= $InitialExecuteCoreCount
@@ -534,8 +548,7 @@ Autoscale = $Autoscale
     Preemptible = ${ifThenElse(Preemptible == true, Preemptible, undefined)}
 
         [[[configuration]]]
-        run_list = recipe[createusers::move_localuser_home], recipe[cyclecloud], role[chainlink_execute_role]
-
+        run_list = recipe[createusers::move_localuser_home], recipe[cyclecloud], recipe[ntp_patch::time], role[chainlink_execute_role]
 
         [[[cluster-init execute]]]
         Project=Chainlink
@@ -579,7 +592,6 @@ Autoscale = $Autoscale
 
     # The maximum number of instances to start when the cluster is configured for autoscaling
     MaxCount = $MaxHighMemCount
-
 
     # AWS Spot Market bid prices - uncomment and enter the bid price for the nodes to provision
     BidPrice = ${ifThenElse(awsUseSpot == true, awsHighMemBidPrice, undefined)}
