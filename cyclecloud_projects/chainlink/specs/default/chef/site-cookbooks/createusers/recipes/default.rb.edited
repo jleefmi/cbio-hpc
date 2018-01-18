@@ -1,0 +1,35 @@
+#
+# Cookbook Name:: createusers
+# Recipe:: default.rb
+#
+# Copyright 2017, Cycle Computing, LLC
+#
+# All rights reserved - Do Not Redistribute
+#
+
+directory node['createusers']['base_home_dir'] do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
+  recursive true
+end
+
+users_manage "compbio" do
+    group_id 512
+    data_bag "fmi_default"
+    action [:remove, :create]
+end
+
+#users_manage "fmi_default" do
+#    group_id 512
+#    action [:remove, :create]
+#end
+
+require 'net/http'
+# include_recipe "cuser"
+
+# Note: There is different behavior on chef-server and chef-solo with regard to data bags
+# If the databag is NOT found on the file-system in chef-solo an empty list is returned by the data_bag call
+# If the databag is NOT found on the chef-server, an 404 exception is thrown. For compatibility we catch this exception
+# and return an empty list.

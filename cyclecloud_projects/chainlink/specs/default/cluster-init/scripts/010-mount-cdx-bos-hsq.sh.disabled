@@ -1,0 +1,6 @@
+#!/bin/bash
+# Dirty read-only mount of existing HSQ directories as of 10AUG2017
+
+echo "cdx-bos-nas01-nfs02.cdx.corp.local:/ifs/data/hsq /cdx-bos-hsq nfs ro,nfsvers=3,tcp,hard,intr,rsize=131072,wsize=524288 0 0" >> /etc/fstab;
+mkdir -p /cdx-bos-hsq;
+mount /cdx-bos-hsq;

@@ -1,0 +1,3 @@
+# FMI Config to allow pipeline user to sudo as root user
+
+pipeline_qa ALL=(ALL) NOPASSWD: ALL

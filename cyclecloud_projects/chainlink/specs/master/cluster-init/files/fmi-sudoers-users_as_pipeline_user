@@ -1,0 +1,8 @@
+# FMI Config to allow all users of group compbio to sudo as pipeline_qa user
+
+rlasko  ALL=(pipeline_qa) ALL
+jwhite  ALL=(pipeline_qa) ALL
+sroels  ALL=(pipeline_qa) ALL
+jdeffenbaugh ALL=(pipeline_qa) ALL
+aholman ALL=(pipeline_qa) ALL
+jgreenbowe ALL=(pipeline_qa) ALL

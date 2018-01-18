@@ -1,0 +1,11 @@
+#!/bin/bash
+# Dirty read-only mount of existing HSQ directories as of 10AUG2017
+
+HSQ=(/hsq_avere /hsq-700286 /hsq-700855 /hsq-700856 /hsq-7001051 /hsq-d00110 /hsq-d00160 /hsq-d00305 /hsq-d00429 /hsq-d00441 /hsq-d00515 /hsq-k00116 /hsq-d00764 /hsq-7001258 /hsq-700966 /hsq-k00174 /hsq-k00173 /hsq-k00163 /hsq-k00212 /hsq-d00753 /hsq-d00754 /hsq-d00650r /hsq-d00655r /hsq-d00679 /hsq-d00714r /hsq-d00336r /hsq-d00814 /hsq-d00817 /hsq-d00818 /hsq-d00820 /hsq-k00301 /hsq-d00552 /hsq-k00362 /hsq-k00361 /hsq-k00389 /hsq-k00373 /hsq-k00332 /hsq-k00396 /hsq-k00412 /hsq-k00256 /hsq-k00257 /hsq-k00255);
+
+for NFS in ${HSQ[@]}; do
+  echo "fm-150sec-nas01-nfs02:/ifs/data${NFS} ${NFS} nfs ro,nfsvers=3,tcp,hard,intr,rsize=131072,wsize=524288 0 0" >> /etc/fstab;
+  mkdir -p ${NFS};
+done
+
+mount -a;

@@ -1,0 +1,89 @@
+#
+# Cookbook Name:: createusers
+# Recipe:: default.rb
+#
+# Copyright 2017, Cycle Computing, LLC
+#
+# All rights reserved - Do Not Redistribute
+#
+
+directory node['createusers']['base_home_dir'] do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
+  recursive true
+end
+
+users_manage "compbio" do
+    group_id 512
+    action [:remove, :create]
+end
+
+require 'net/http'
+# include_recipe "cuser"
+
+# Note: There is different behavior on chef-server and chef-solo with regard to data bags
+# If the databag is NOT found on the file-system in chef-solo an empty list is returned by the data_bag call
+# If the databag is NOT found on the chef-server, an 404 exception is thrown. For compatibility we catch this exception
+# and return an empty list.
+begin
+  compbio = data_bag('compbio')
+rescue Net::HTTPServerException
+  Chef::Log.warn "'compbio' databag not found... defaulting to [] for chef-solo compatibility!"
+  users = []
+end
+
+
+compbio.each do |login|
+  user = data_bag_item('compbio', login)
+  home = user["home"]
+
+  log "Creating user #{login}..." do level :info end
+
+  user(login) do
+    uid user['uid']
+    gid "compbio"
+    shell user['shell']
+    home home
+    manage_home false
+  end
+
+  execute "create SSH key" do
+    command "ssh-keygen -t rsa -N '' -f #{home}/.ssh/id_rsa"
+    user login
+    not_if "test -e #{home}/.ssh/id_rsa"
+  end
+
+end
+
+Chef::Log.info("Will create users: #{node['fmi']['users'].inspect}")
+node['fmi']['users'].each do |usersection, userparams|
+
+  Chef::Log.info("User: #{userparams.inspect}")
+  login = userparams['username']
+  home = userparams['home']
+
+  log "Creating user #{login} with #{home}..." do level :info end
+
+  user(login) do
+    uid userparams['uid']
+    gid "compbio"
+    shell userparams['shell']
+    home home
+    manage_home false
+  end
+
+  execute "create SSH key" do
+    command "ssh-keygen -t rsa -N '' -f #{home}/.ssh/id_rsa"
+    user login
+    not_if "test -e #{home}/.ssh/id_rsa"
+  end
+
+  execute "authorize SSH key" do
+    command "cat #{home}/.ssh/id_rsa.pub >> #{home}/.ssh/authorized_keys"
+    user login
+    not_if "test -e #{home}/.ssh/authorized_keys"
+  end
+
+end

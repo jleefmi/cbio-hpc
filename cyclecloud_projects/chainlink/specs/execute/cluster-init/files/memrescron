@@ -1,0 +1,4 @@
+# Run this until GPU attributes are updated on the host
+SHELL=/bin/bash
+* * * * * root /etc/sge/modify_mem_res.cron.sh >> /opt/cycle/jetpack/logs/modify_mem_res.log 2>&1
+

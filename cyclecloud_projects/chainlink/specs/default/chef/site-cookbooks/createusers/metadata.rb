@@ -1,0 +1,7 @@
+maintainer       "Cycle Computing"
+maintainer_email "support@cyclecomputing.com"
+description      "Installs/Configures users"
+version          "0.1"
+name             "createusers"
+depends "users"
+depends "cuser"

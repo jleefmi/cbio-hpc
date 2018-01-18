@@ -1,0 +1,5 @@
+#! /bin/bash
+
+echo "fm-bos-nas01-nfs01.corp.local:/ifs/SIQ/FM-150SEC-NAS01/compbio /bos-isilon/compbio nfs ro,nfsvers=3,tcp,hard,timeo=600,retrans=2,rsize=524288,wsize=524288 0 0" >> /etc/fstab
+mkdir -p /bos-isilon/compbio;
+mount /bos-isilon/compbio;

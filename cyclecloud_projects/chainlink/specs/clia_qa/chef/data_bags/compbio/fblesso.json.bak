@@ -1,0 +1,10 @@
+{
+    "domain": "corp",
+    "groups": [
+        "compbio"
+    ],
+    "home": "/home/fblesso",
+    "id": "fblesso",
+    "shell": "/bin/bash",
+    "uid": "654"
+}
