@@ -439,7 +439,7 @@ IconUrl = static/fmi_icon/fmi_icon.png
         mountpoint = /compbio
         export_path = $CompbioExport
         address = $CloudStorageEndpoint
-        options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
+        options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288,umask=0775,gid=512,uid=0
         owner = root
         group = compbio
         permissions = "0775"
@@ -449,7 +449,7 @@ IconUrl = static/fmi_icon/fmi_icon.png
         mountpoint = /home
         export_path = $HomeExport
         address = $CloudStorageEndpoint
-        options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
+        options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288,umask=0775,gid=512,uid=0
         owner = root
         group = compbio
         permissions = "0755"
@@ -459,7 +459,7 @@ IconUrl = static/fmi_icon/fmi_icon.png
         mountpoint = /hsq
         export_path = $HSQExport
         address = $HSQCloudStorageEndpoint
-        options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
+        options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288,umask=0775,gid=512,uid=0
         owner = root
         group = compbio
         permissions = "0775"

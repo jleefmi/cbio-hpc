@@ -1,12 +1,11 @@
 name "chainlink_master_role"
 description "Chainlink Master Role"
-run_list("role[scheduler]",   
+run_list("role[scheduler]",
   "recipe[createusers]",
   "recipe[cyclecloud]",
   "recipe[cshared::directories]",
   "recipe[cuser]",
   "recipe[cshared::server]",
-  "recipe[createusers::chown_mounts]",
   "recipe[uge::master]",
   "recipe[cganglia::server]",
   "recipe[cluster_init]")
