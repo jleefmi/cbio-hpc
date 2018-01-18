@@ -1,4 +1,7 @@
 {
+  "CycleClusterName": "CLIAQA01",
+  "ChainlinkEnv": "clia_qa",
+  "ChainlinkVersion": "1.0.5",
   "InitialHighMemCount": 0,
   "MaxHighMemCount": 20,
   "HighMemMachineType": "r4.8xlarge",
@@ -9,11 +12,11 @@
   "PipelineUserGroups": [
     "compbio"
   ],
-  "HomeExport" : "/clia-home",
-  "CompbioExport" : "/clia-compbio",
-  "HSQExport" : "/clia-hsq",
-  "CloudStorageEndpoint" : "fm-ae1-nas-q01.corp.local",
-  "HSQCloudStorageEndpoint" : "ae1-avere-shared-c01.corp.local",
+  "HomeExport": "/clia-home",
+  "CompbioExport": "/clia-compbio",
+  "HSQExport": "/clia-hsq",
+  "CloudStorageEndpoint": "fm-ae1-nas-q01.corp.local",
+  "HSQCloudStorageEndpoint": "ae1-avere-shared-c01.corp.local",
   "MaxExecuteCoreCount": 3072,
   "MasterMachineType": "r4.4xlarge",
   "MasterSlotCount": 0,
