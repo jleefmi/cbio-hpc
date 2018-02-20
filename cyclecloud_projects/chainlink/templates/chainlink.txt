@@ -53,7 +53,7 @@ Order = 20
         [[[parameter HSQExport]]]
         Required = true
 
-	[[[parameter Rpc_Slots]]]
+  [[[parameter Rpc_Slots]]]
         DefaultValue = 128
         Required = true
 
@@ -75,14 +75,14 @@ Order = 20
         [[[parameter PipelineUserGroups]]]
         Required = true
 
-	[[[parameter ChainlinkEnv]]]
-	Required = true
+  [[[parameter ChainlinkEnv]]]
+  Required = true
 
   [[[parameter UgeProjectVersion]]]
   Required = true
 
-	[[[parameter ChainlinkVersion]]]
-	Required = true
+  [[[parameter ChainlinkVersion]]]
+  Required = true
 
         [[[parameter GridEngineVersion]]]
         Label = GridEngine version
@@ -156,7 +156,7 @@ Order = 30
         Config.IntegerOnly = true
 
         [[[parameter MasterSlotCount]]]
-	DefaultValue = 0
+  DefaultValue = 0
 
        [[[parameter PersistentMachineType]]]
         Label = Persistent Exec Type
@@ -407,16 +407,16 @@ Autoscale = $Autoscale
         # cyclecloud.cluster.user.password = abc;123
         cyclecloud.cluster.user.uid = 55555
         cyclecloud.cluster.user.gid = 55555
-	fmi.sysctl.rpc_slots = $Rpc_Slots
+        fmi.sysctl.rpc_slots = $Rpc_Slots
 
         # Simulate DNS for now
-#        cyclecloud.hosts.standalone_dns.enabled = true
-#        cyclecloud.hosts.standalone_dns.suffix=corp.local
+#       cyclecloud.hosts.standalone_dns.enabled = true
+#       cyclecloud.hosts.standalone_dns.suffix=corp.local
         cyclecloud.hosts.simple_vpc_dns.enabled = true
         cyclecloud.hosts.simple_vpc_dns.suffix=corp.local
 
-	# NTP Config
-	cyclecloud.ntp.servers = ntp.corp.local, ntp01.corp.local, ntp02.corp.local
+        # NTP Config
+        cyclecloud.ntp.servers = ntp.corp.local, ntp01.corp.local, ntp02.corp.local
 
         # No need for fail2ban in vpc
         cyclecloud.fail2ban.enabled = false
@@ -440,14 +440,14 @@ Autoscale = $Autoscale
 
 
         [[[configuration cyclecloud.mounts.compbio]]]
-	type = nfs
-	mountpoint = /compbio
+        type = nfs
+        mountpoint = /compbio
         export_path = $CompbioExport
-	address = $CloudStorageEndpoint
-	options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
-	owner = root
-	group = compbio
-	permissions = "0775"
+        address = $CloudStorageEndpoint
+        options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
+        owner = root
+        group = compbio
+        permissions = "0775"
 
         [[[configuration cyclecloud.mounts.home]]]
         type = nfs
@@ -503,7 +503,7 @@ Autoscale = $Autoscale
         # cycle_server.admin.pass=123456
 
         [[[cluster-init master]]]
-	Project=Chainlink
+        Project=Chainlink
         Spec=master
         Version=$ChainlinkVersion
 
@@ -589,7 +589,7 @@ Autoscale = $Autoscale
 
         [[[configuration]]]
         gridengine.slot_type = highmem
-	gridengine.slots = 1
+        gridengine.slots = 1
 
         [[[input-endpoint SSH]]]
         PrivatePort = 22
