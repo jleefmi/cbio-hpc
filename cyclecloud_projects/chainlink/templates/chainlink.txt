@@ -13,7 +13,7 @@ Order = 10
         Label = Cloud Provider
         ParameterType = Cloud.Provider
         DefaultValue = AWS
- 
+
         [[[parameter Credentials]]]
         Description = The credentials for the cloud provider
         ParameterType = Cloud.Credentials
@@ -35,7 +35,7 @@ Order = 20
         Label = Base OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        Config.Filter := regexp("FMI", Package, "i")        
+        Config.Filter := regexp("FMI", Package, "i")
         DefaultValue = FMI.CENTOS7.R4
 
         [[[parameter CommonChefRepoVersion]]]
@@ -77,6 +77,9 @@ Order = 20
 
 	[[[parameter ChainlinkEnv]]]
 	Required = true
+
+  [[[parameter UgeProjectVersion]]]
+  Required = true
 
 	[[[parameter ChainlinkVersion]]]
 	Required = true
@@ -151,7 +154,7 @@ Order = 30
         Config.MinValue = 50
         Config.MaxValue = 1000
         Config.IntegerOnly = true
-	
+
         [[[parameter MasterSlotCount]]]
 	DefaultValue = 0
 
@@ -163,7 +166,7 @@ Order = 30
             AWS = r4.large
             Azure = Standard_A4
             GCP = n1-standard-4
- 
+
         [[[parameter ExecuteMachineType]]]
         Label = Execute Type
         Description = The machine type for execute nodes
@@ -183,7 +186,7 @@ Order = 30
             GCP = n1-standard-16
 
 
- 
+
         [[[parameter ExecuteInstanceProfileArn]]]
         Label = Execute IAM Role
         Description = The instance profile ARN for the execute nodes
@@ -199,7 +202,7 @@ Order = 30
         DefaultValue = true
         Widget.Plugin = pico.form.BooleanCheckBox
         Widget.Label = Start and stop execute instances automatically
- 
+
         [[[parameter InitialPersistentCount]]]
         Label = Persistent Nodes
         Description = The number of persistent cores to launch on startup
@@ -208,7 +211,7 @@ Order = 30
         Config.MinValue = 0
         Config.MaxValue = 200
         Config.IntegerOnly = true
- 
+
         [[[parameter MaxPersistentCount]]]
         # Set to the MaxValue above
         Label = Max Persistent Nodes
@@ -219,7 +222,7 @@ Order = 30
         Config.MaxValue = 200
         Config.IntegerOnly = true
         Hidden = true
- 
+
         [[[parameter InitialExecuteCoreCount]]]
         Label = Init Exec Cores
         Description = The number of execute cores to launch on startup
@@ -260,9 +263,9 @@ Order = 30
         DefaultValue = false
         Widget.Plugin = pico.form.BooleanCheckBox
         Widget.Label = Use spot instances for execute hosts
- 
+
         [[[parameter awsBidPricePerCore]]]
-        Label = BidPrice Per vCPU 
+        Label = BidPrice Per vCPU
         DefaultValue = 0.10
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 0
@@ -308,7 +311,7 @@ Order = 40
     Order = 20
     Conditions.Excluded := CloudProvider !== "AWS"
     Description = "Optional use of VPC components. Without specifying a subnet or security group the hosts will be started in the default region, VPC and security group."
- 
+
         [[[parameter awsMasterSubnetId]]]
         Label = Master Subnet
         Description = The subnet ID to use when in a VPC environment
@@ -347,7 +350,7 @@ Order = 40
     [[parameters Azure Virtual Network Configuration]]
     Order = 40
     Conditions.Excluded := CloudProvider !== "Azure"
- 
+
         [[[parameter azureMasterSubnetId]]]
         Label = Master Subnet
         Description = Subnet Resource Path (ResourceGroup/VirtualNetwork/Subnet)
@@ -379,17 +382,17 @@ Autoscale = $Autoscale
     Credentials = $Credentials
 
     ImageName = $ImageName
-    AwaitInstallation = true   
+    AwaitInstallation = true
     SubnetId = ${IfThenElse(CloudProvider==="Azure", azureExecuteSubnetId, awsExecuteSubnetId)}
     Region = $Region
-   
+
     CommonChefRepoVersion = $CommonChefRepoVersion
- 
+
     # EC2
     KeyPair = $awsKeypair
     KeyPairLocation = $keypairLocation
     SecurityGroups = $awsExecuteSecurityGroups
- 
+
     # Azure
     Username = $Username
     Password = $Password
@@ -449,12 +452,12 @@ Autoscale = $Autoscale
         [[[configuration cyclecloud.mounts.home]]]
         type = nfs
         mountpoint = /home
-        export_path = $HomeExport	
+        export_path = $HomeExport
         address = $CloudStorageEndpoint
-	options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
-	owner = root
-	group = compbio
-	permissions = "0755"
+      	options = nfsvers=3,tcp,hard,timeo=6000,retrans=2,rsize=524288,wsize=524288
+      	owner = root
+      	group = compbio
+      	permissions = "0755"
 
         [[[configuration cyclecloud.mounts.hsq]]]
         type = nfs
@@ -466,15 +469,20 @@ Autoscale = $Autoscale
         group = compbio
         permissions = "0775"
 
-        [[[cluster-init uge:default:1.0.0]]]
+        [[[cluster-init uge_default]]]
+        Project=uge
+        Spec=default
+        Version=$UgeProjectVersion
+
         [[[cluster-init default]]]
-	Project=Chainlink
-	Spec=default
-	Version=$ChainlinkVersion
-	[[[cluster-init env]]]
-	Project=Chainlink
-	Spec=$ChainlinkEnv
-	Version=$ChainlinkVersion
+      	Project=Chainlink
+      	Spec=default
+      	Version=$ChainlinkVersion
+
+      	[[[cluster-init env]]]
+      	Project=Chainlink
+      	Spec=$ChainlinkEnv
+      	Version=$ChainlinkVersion
 
 
     [[node master]]
@@ -482,18 +490,18 @@ Autoscale = $Autoscale
     IsReturnProxy = $ReturnProxy
     AWS.InstanceProfileArn = $MasterInstanceProfileArn
     AWS.RootDeviceSize=$MasterRootDeviceSize
-    
+
     SubnetId = ${IfThenElse(CloudProvider==="Azure", azureMasterSubnetId, awsMasterSubnetId)}
     SecurityGroups = $awsMasterSecurityGroups
- 
+
         [[[configuration]]]
         # This is the Chef runlist to use for the node, to customize this add customized recipes and/or roles
         run_list = recipe[createusers::move_localuser_home], recipe[cyclecloud], role[chainlink_master_role]
-        
+
         gridengine.slots = $MasterSlotCount
 
         # cycle_server.admin.pass=123456
-	
+
         [[[cluster-init master]]]
 	Project=Chainlink
         Spec=master
@@ -512,7 +520,7 @@ Autoscale = $Autoscale
     [[nodearray execute]]
     MachineType = $ExecuteMachineType
     AWS.InstanceProfileArn = $ExecuteInstanceProfileArn
- 
+
     # The initial number of cores of this type to start when the cluster starts
     InitialCoreCount= $InitialExecuteCoreCount
 
@@ -521,7 +529,7 @@ Autoscale = $Autoscale
 
     # AWS Spot Market bid prices - uncomment and enter the bid price for the nodes to provision
     BidPricePerCore = ${ifThenElse(awsUseSpot == true, awsBidPricePerCore, undefined)}
- 
+
     # Use GCP Premptible Instances?
     Preemptible = ${ifThenElse(Preemptible == true, Preemptible, undefined)}
 
@@ -533,31 +541,31 @@ Autoscale = $Autoscale
         Project=Chainlink
         Spec=execute
         Version=$ChainlinkVersion
-	
+
         [[[input-endpoint SSH]]]
         PrivatePort = 22
         PublicPort = 55100
-        
+
     [[nodearray persistent]]
     Extends = execute
     MachineType = $PersistentMachineType
-   
+
     # The initial number of instances of this type to start when the cluster starts
     InitialCount = $InitialPersistentCount
     InitialCoreCount = =undefined
- 
+
     # The maximum number of cores to start when the cluster is configured for autoscaling
     MaxCount = $MaxPersistentCount
     MaxCoreCount = =undefined
- 
+
     # Disable spot/preemptible for persistent instances
     BidPricePerCore = =undefined
     Preemptible = =undefined
- 
+
         [[[configuration]]]
         gridengine.slot_type = execute
         cyclecloud.cluster.autoscale.stop_enabled = false
- 
+
         [[[input-endpoint SSH]]]
         PrivatePort = 22
         PublicPort = 59100
@@ -576,15 +584,13 @@ Autoscale = $Autoscale
     # AWS Spot Market bid prices - uncomment and enter the bid price for the nodes to provision
     BidPrice = ${ifThenElse(awsUseSpot == true, awsHighMemBidPrice, undefined)}
     BidPricePerCore = =undefined
-    
+
     CoreCount = 1
 
         [[[configuration]]]
         gridengine.slot_type = highmem
 	gridengine.slots = 1
- 
+
         [[[input-endpoint SSH]]]
         PrivatePort = 22
         PublicPort = 61000
-
-

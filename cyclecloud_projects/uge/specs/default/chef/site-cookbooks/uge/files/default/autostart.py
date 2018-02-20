@@ -15,6 +15,11 @@ def _get_jobs():
         if job["job_state"] in ["h", "e"]:
             continue
 
+        # Ignore jobs that are no longer in qstat output - added 20FEB2018 JLouie
+        if job["job_number"] not in job_details:
+            print "PATCHED: Job %s is no longer in qstat details.  Skipping..." % (job["job_number"])
+            continue
+
         detail = job_details[job["job_number"]]
 
         slot_type = None
@@ -28,7 +33,7 @@ def _get_jobs():
         average_runtime = None
         if 'context' in detail and 'average_runtime' in detail['context']:
             average_runtime = int(detail['context']['average_runtime'])
-        
+
         job = {
             'name': job['job_number'],
             'nodearray': slot_type,

@@ -2,6 +2,7 @@
   "CycleClusterName" : "EFSQA02",
   "ChainlinkEnv" : "cdx_qa",
   "ChainlinkVersion" : "1.0.4",
+  "UgeProjectVersion" : "1.0.0",
   "InitialHighMemCount": 0,
   "MaxHighMemCount": 16,
   "HighMemMachineType": "r4.8xlarge",
