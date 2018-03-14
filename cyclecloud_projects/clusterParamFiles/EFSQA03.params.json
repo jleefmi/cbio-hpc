@@ -1,5 +1,5 @@
 {
-  "CycleClusterName" : "EFSDEV01",
+  "CycleClusterName" : "EFSQA03",
   "ChainlinkEnv" : "cdx_qa",
   "ChainlinkVersion" : "1.0.5",
   "UgeProjectVersion" : "1.0.1",
@@ -30,8 +30,8 @@
   "azureMasterSubnetId": null,
   "ExecuteMachineType": "r4.2xlarge",
   "ExecRootDeviceSize": 50,
-  "ExecRootDeviceType": gp2,
-  "ExecRootDeviceIops": null,  
+  "ExecRootDeviceType": "gp2",
+  "ExecRootDeviceIops": null,
   "PersistentMachineType": "r4.2xlarge",
   "ExecuteInstanceProfileArn": "arn:aws:iam::852372144783:instance-profile/cyclecloud",
   "awsExecuteSecurityGroups": [
