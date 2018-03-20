@@ -45,6 +45,16 @@ Here are a few relevant chapters (note that these links refer to CycleCloud 6.6 
 
 # Installing Cyclecloud: #
 
+## AWS Account Setup ##
+
+  1. Create a new bucket for use as the CycleCloud locker
+     - Set bucket policy (encryption, etc.)
+  2. Copy the Installers directory to the new bucket:
+     - From : aws s3 cp --recursive s3://fm-ae1-cyclecloud-poc/installers/ /tmp/installers/
+     - To: aws s3 cp --recursive /tmp/installers/ s3://${NEW_BUCKET_NAME}/installers/
+  3. Create the CycleCloud IAM policy and role using the [installers/CycleCloud_IAM_Policy.json]
+  
+
 ## Basic Installation: ##
 
 CycleCloud may be installed manually using the following script:
@@ -88,10 +98,10 @@ CycleCloud may be installed manually using the following script:
 ### Copy cyclecloud configuration files ###
 
 ``` bash
-   chown cycle_server:cycle_server ${CLOUD_FORMATION_DIR}/cyclecloud_init.txt
-   chown cycle_server:cycle_server ${CLOUD_FORMATION_DIR}/users_init.txt
-   cp ${CLOUD_FORMATION_DIR}/cyclecloud_init.txt ${CS_HOME}/config/data
-   cp ${CLOUD_FORMATION_DIR}/users_init.txt ${CS_HOME}/config/data
+   chown cycle_server:cycle_server ${INSTALL_DIR}/cyclecloud_init.txt
+   chown cycle_server:cycle_server ${INSTALL_DIR}/users_init.txt
+   cp ${INSTALL_DIR}/cyclecloud_init.txt ${CS_HOME}/config/data
+   cp ${INSTALL_DIR}/users_init.txt ${CS_HOME}/config/data
 
    cd ${CS_HOME}
 
@@ -106,6 +116,8 @@ CycleCloud may be installed manually using the following script:
    sed -i '/^webServerPort/c webServerPort=80' ${CS_HOME}/config/cycle_server.properties
    sed -i '/^webServerSslPort/c webServerSslPort=443' ${CS_HOME}/config/cycle_server.properties
    sed -i '/^brokerMaxHeapSize/c brokerMaxHeapSize=2048M' ${CS_HOME}/config/cycle_server.properties
+   sed -i '/^webServerEnableHttp=/c webServerEnableHttp=false' ${CS_HOME}/config/cycle_server.properties
+   sed -i '/^webServerEnableHttps=/c webServerEnableHttps=true' ${CS_HOME}/config/cycle_server.properties
 
    echo "Starting CycleCloud..."        
    ${CS_HOME}/cycle_server start --wait
