@@ -40,6 +40,8 @@
    sed -i '/^webServerPort/c webServerPort=80' ${CS_HOME}/config/cycle_server.properties
    sed -i '/^webServerSslPort/c webServerSslPort=443' ${CS_HOME}/config/cycle_server.properties
    sed -i '/^brokerMaxHeapSize/c brokerMaxHeapSize=2048M' ${CS_HOME}/config/cycle_server.properties
-
+   sed -i '/^webServerEnableHttp/c webServerEnableHttp=false' ${CS_HOME}/config/cycle_server.properties
+   sed -i '/^webServerEnableHttps/c webServerEnableHttps=true' ${CS_HOME}/config/cycle_server.properties
+   
    echo "Starting CycleCloud..."
    ${CS_HOME}/cycle_server start --wait
