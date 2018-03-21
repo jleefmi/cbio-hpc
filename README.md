@@ -119,23 +119,46 @@ CycleCloud may be installed on the new instance manually using the following scr
    cp ${INSTALL_DIR}/users_init.txt ${CS_HOME}/config/data
 
    cd ${CS_HOME}
+<<<<<<< HEAD
    
    ### Set ports and HTTPS ###
 
-   sed -i '/^webServerMaxHeapSize/c webServerMaxHeapSize=8192M' ${CS_HOME}/config/cycle_server.properties
-   sed -i '/^webServerPort/c webServerPort=80' ${CS_HOME}/config/cycle_server.properties
-   sed -i '/^webServerSslPort/c webServerSslPort=443' ${CS_HOME}/config/cycle_server.properties
-   sed -i '/^brokerMaxHeapSize/c brokerMaxHeapSize=2048M' ${CS_HOME}/config/cycle_server.properties
-   sed -i '/^webServerEnableHttp=/c webServerEnableHttp=false' ${CS_HOME}/config/cycle_server.properties
-   sed -i '/^webServerEnableHttps=/c webServerEnableHttps=true' ${CS_HOME}/config/cycle_server.properties
+```
+### Create Self Signed SSL Certificate ###
 
-   ### Create the SSH Keystore ###
-   /bin/keytool -genkey -keyalg RSA -sigalg SHA256withRSA -alias CycleServer -keypass "changeit" -keystore .keystore -storepass "changeit"
+``` bash
+echo "${cyn}Create self-signed SSL cert...${end}";
+keytool -genkey \
+-keyalg RSA \
+-sigalg SHA256withRSA \
+-alias CycleServer \
+-dname "CN=Foundation Medicine, OU=IT, O=Foundation Medicine, L=Cambridge, ST=MA, C=US" \
+-keypass "SelfSignedUseOnlyPlease" \
+-keystore .keystore \
+-storepass "SelfSignedUseOnlyPlease"
 
-   echo "Starting CycleCloud..."        
-   ${CS_HOME}/cycle_server start --wait
+mv .keystore ${CS_HOME}/
+chown cycle_server:cycle_server ${CS_HOME}/.keystore
 ```
 
+### Set Cert, Ports and HTTPS ###
+>>>>>>> 5c56ff5bab4ebe8157780b566f20efbcf36b17df
+
+``` bash
+sed -i 's/^webServerKeystorePass=changeit/webServerKeystorePass=SelfSignedUseOnlyPlease/' ${CS_HOME}/config/cycle_server.properties
+sed -i '/^webServerMaxHeapSize/c webServerMaxHeapSize=8192M' ${CS_HOME}/config/cycle_server.properties
+sed -i '/^webServerPort/c webServerPort=80' ${CS_HOME}/config/cycle_server.properties
+sed -i '/^webServerSslPort/c webServerSslPort=443' ${CS_HOME}/config/cycle_server.properties
+sed -i '/^brokerMaxHeapSize/c brokerMaxHeapSize=2048M' ${CS_HOME}/config/cycle_server.properties
+sed -i '/^webServerEnableHttp=/c webServerEnableHttp=false' ${CS_HOME}/config/cycle_server.properties
+sed -i '/^webServerEnableHttps=/c webServerEnableHttps=true' ${CS_HOME}/config/cycle_server.properties
+
+### Create the SSH Keystore ###
+/bin/keytool -genkey -keyalg RSA -sigalg SHA256withRSA -alias CycleServer -keypass "changeit" -keystore .keystore -storepass "changeit"
+
+echo "Starting CycleCloud..."
+${CS_HOME}/cycle_server start --wait
+```
 
 ### Account and User Setup: ###
 
