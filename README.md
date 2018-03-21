@@ -142,7 +142,6 @@ chown cycle_server:cycle_server ${CS_HOME}/.keystore
 ```
 
 ### Set Cert, Ports and HTTPS ###
->>>>>>> 5c56ff5bab4ebe8157780b566f20efbcf36b17df
 
 ``` bash
 sed -i 's/^webServerKeystorePass=changeit/webServerKeystorePass=SelfSignedUseOnlyPlease/' ${CS_HOME}/config/cycle_server.properties
