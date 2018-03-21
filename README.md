@@ -45,7 +45,7 @@ Here are a few relevant chapters (note that these links refer to CycleCloud 6.6 
 
 # Installing Cyclecloud: #
 
-## AWS Account Setup ##
+## CycleCloud Locker Creation ##
 
   1. Create a new bucket for use as the CycleCloud locker
      - Set bucket policy (encryption, etc.)
@@ -53,11 +53,27 @@ Here are a few relevant chapters (note that these links refer to CycleCloud 6.6 
      - From : aws s3 cp --recursive s3://fm-ae1-cyclecloud-poc/installers/ /tmp/installers/
      - To: aws s3 cp --recursive /tmp/installers/ s3://${NEW_BUCKET_NAME}/installers/
   3. Create the CycleCloud IAM policy and role using the [installers/CycleCloud_IAM_Policy.json]
-  
+
+
+## CycleCloud Instance Role Creation ##
+
+  1. Create a new IAM Policy and Role for the new cyclecloud instance
+     a. Copy the role from the existing policy on-prem
+
+**TODO** Add the sample policy file
+
 
 ## Basic Installation: ##
 
-CycleCloud may be installed manually using the following script:
+Launch a new instance with the following minimum specs:
+
+  * CycleCloud Instance Role
+  * 4 CPUs
+  * 16 GB RAM
+  * 100 GB SSD EBS storage for CycleCloud data
+
+
+CycleCloud may be installed on the new instance manually using the following script:
 
 ``` bash
 
@@ -93,24 +109,18 @@ CycleCloud may be installed manually using the following script:
    ./install.sh --nostart
    popd
 
-```
 
-### Copy cyclecloud configuration files ###
+   ### Copy cyclecloud configuration files ###
 
-``` bash
+
    chown cycle_server:cycle_server ${INSTALL_DIR}/cyclecloud_init.txt
    chown cycle_server:cycle_server ${INSTALL_DIR}/users_init.txt
    cp ${INSTALL_DIR}/cyclecloud_init.txt ${CS_HOME}/config/data
    cp ${INSTALL_DIR}/users_init.txt ${CS_HOME}/config/data
 
    cd ${CS_HOME}
-
-```
-
-
-### Set ports and HTTPS ###
-
-``` bash
+   
+   ### Set ports and HTTPS ###
 
    sed -i '/^webServerMaxHeapSize/c webServerMaxHeapSize=8192M' ${CS_HOME}/config/cycle_server.properties
    sed -i '/^webServerPort/c webServerPort=80' ${CS_HOME}/config/cycle_server.properties
@@ -119,10 +129,12 @@ CycleCloud may be installed manually using the following script:
    sed -i '/^webServerEnableHttp=/c webServerEnableHttp=false' ${CS_HOME}/config/cycle_server.properties
    sed -i '/^webServerEnableHttps=/c webServerEnableHttps=true' ${CS_HOME}/config/cycle_server.properties
 
+   ### Create the SSH Keystore ###
+   /bin/keytool -genkey -keyalg RSA -sigalg SHA256withRSA -alias CycleServer -keypass "changeit" -keystore .keystore -storepass "changeit"
+
    echo "Starting CycleCloud..."        
    ${CS_HOME}/cycle_server start --wait
 ```
-
 
 
 ### Account and User Setup: ###
@@ -155,6 +167,7 @@ To build the image:
 
   1.	Launch and instance of the desired base AMI with ENA enabled from the AWS Console
     a.	The current base image is: CentOS7 R4 w/ ENA (ami-b57350a3)
+    b.  Be sure to assign an Instance Role with S3 access to your locker
   2.	Connect to the new instance via SSH
   3.	Remove all un-necessary files
     a.	The current base image includes a pre-installed copy of Univa Grid Engine which should be removed
@@ -191,6 +204,7 @@ To build the image:
   6.	Clean up the instance prior to baking (as root): 
 
   ``` bash
+  cd /tmp
   rm -rf /tmp/installers
   passwd -l root
   history -w
@@ -202,15 +216,28 @@ To build the image:
   ```
 
   7.	Bake the image from the AWS Console by selecting the running Instance, right-clicking and selecting "Image -> Create Image" from the context menu. 
-  8.	Finally, register the AMI ID for the newly baked image with cyclecloud (where the Version should b:
+  8.	Finally, register the AMI ID for the newly baked image with cyclecloud (where the Version should b (**IMPORTANT** REPLACE the ${REGION} and ${AMI_ID} in the block below with the new AMI ID and the correct Region):
 
   ``` bash
-  Version = "1.X"
+  Version = "1.0"
   OS = "linux"
   PackageType = "Image"
   AdType = "Package"
   Label = "CentOS7 R4 ENA - CycleCloud"
   Name = "FMI.CENTOS7.R4"
+
+  Virtualization = "hvm"
+  Version = "1.0"
+  Region = "${REGION}"
+  Provider = "aws"
+  Package = "FMI.CENTOS7.R4"
+  AdType = "Artifact"
+  Description = "CentOS7 Cycle R4"
+  ImageId = "${AMI_ID}"
+  Name = "aws/${REGION}/hvm"
+  Size = 30
+  AccountName = "cloud"
+
 
   ```
 
@@ -226,6 +253,64 @@ The Chainlink cluster type relies on two primary CycleCloud projects:
     a.	Installs and Configures Univa Grid Engine 
   2.	Chainlink
     a.	Installs and Configures the Chainlink application
+
+
+## Chainlink Project Setup ##
+
+  1. Setup Avere subdirectories for the new cluster
+    a. [/compbio, /home, /hsq]
+  2. Download a copy of the cbio-hpc repository from GitHub and scp to the new CycleCloud instance
+  3. SSH to the new CycleCloud instance and sudo to root
+  4. Extract the cbio-hpc repository archive to /
+  5. Initialize the CycleCloud CLI
+    a. `cyclecloud initialize`
+  6. Test the CLI
+    b. `cyclecloud show_cluster`
+  7. Configure access to the Locker for the CLI
+  ```
+  # Get the list of configured lockers (if you have forgotten the name)
+  cyclecloud locker list
+
+  # Append the pogo config section to the end of the config file
+  $ vi ~/.cycle/config.ini
+
+  [pogo cloud-storage]
+  type = s3
+  matches = s3://
+  server_side_encryption = true
+  use_instance_creds = true
+  ```
+    
+  8. Make a new directory for the UGE Binaries to `/cbio-hpc/cyclecloud_projects/chainlink/specs/default/ge/` and copy the GE tarballs into it.
+  9. Upload the Chainlink and UGE Projects to the new Locker:
+  ``` bash
+  # Get the list of configured lockers (if you have forgotten the name)
+  cyclecloud locker list
+
+  # Assuming the locker name is "cloud-storage"
+  cd /cbio-hpc/cyclecloud_projects/chainlink
+  cyclecloud project upload cloud-storage
+
+  cd /cbio-hpc/cyclecloud_projects/uge
+  cyclecloud project upload cloud-storage
+  ```
+  10. Create a new Parameters file by copying and modifying one of the existing params files in `/cbio-hpc/cyclecloud_projects/clusterParametersFiles`
+    a. Check :
+      * Avere paths
+      * Instance Roles
+      * Locker location
+      * Account names
+      * Project Versions
+      * Security Groups
+      * Subnets
+  11. Import and Start the new cluster.  For example, for the CDX_QA cluster:
+  ``` bash
+  cyclecloud import_cluster CDX_QA -c chainlink -f /cbio-hpc/cyclecloud_projects/chainlink/templates/chainlink.txt -p /cbio-hpc/cyclecloud_projects/clusterParametersFiles/CDX_QA.params.json
+
+  cyclecloud start_cluster CDX_QA
+  ```
+  
+
 
 
 ### Operations: ###
