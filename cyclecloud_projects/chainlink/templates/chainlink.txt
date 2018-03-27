@@ -597,11 +597,11 @@ IconUrl = static/fmi_icon/fmi_icon.png
     BidPrice = ${ifThenElse(awsUseSpot == true, awsHighMemBidPrice, undefined)}
     BidPricePerCore = =undefined
 
-    CoreCount = 1
+    CoreCount = 16
 
         [[[configuration]]]
         gridengine.slot_type = highmem
-        gridengine.slots = 1
+        #gridengine.slots = 16
 
         [[[input-endpoint SSH]]]
         PrivatePort = 22
