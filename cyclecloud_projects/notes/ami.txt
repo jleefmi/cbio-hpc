@@ -7,3 +7,6 @@ ami-a835ebd5    AWS image in account cloud, region us-east-1 (standard HVM), 8 G
 
 Added image FMI.Image.CGR.CentOS7, v1.0 with one artifact from one account (cloud)
 [svc_cyclecloud_qa@usae1cyclappq01 ~]$
+
+
+TEST
