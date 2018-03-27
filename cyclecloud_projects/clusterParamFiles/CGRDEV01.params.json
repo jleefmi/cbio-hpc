@@ -8,7 +8,7 @@
   "HighMemMachineType": "r4.8xlarge",
   "Rpc_Slots": "65536",
   "PipelineUserName" : "pipeline_research",
-  "PipelineUserUid" : "625",
+  "PipelineUserUid" : "512",
   "PipelineUserGid": "512",
   "PipelineUserGroups": [
     "compbio"
