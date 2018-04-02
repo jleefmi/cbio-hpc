@@ -61,18 +61,10 @@ define :nfs_mount, :data => "" do
       # Create mount point (defaults to same path as the export on the server)
       # TODO: should probably make owner/perms configurable
       Chef::Log.info "Mounting #{name} filesystem at #{mountpoint}..."
-      owner = mount['owner'].nil? ? "root" :  mount['owner']
-      group = mount['group'].nil? ? owner :  mount['group']
-      perms = mount['permissions'].nil? ? "0755" :  mount['permissions']
-
-      log "Setting ownership of #{name} filesystem to #{owner}:#{group} with perms: #{perms}..." do
-        level :info
-        not_if "test -d #{mountpoint}"
-      end
       directory mountpoint  do
-        owner owner
-        group group
-        mode perms
+        owner "root"
+        group "root"
+        mode 0755 
         recursive true
         not_if "test -d #{mountpoint}"
       end
