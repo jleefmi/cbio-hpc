@@ -10,3 +10,6 @@ Added image FMI.Image.CGR.CentOS7, v1.0 with one artifact from one account (clou
 
 For CGRDEVO1 Deployment
 cyclecloud import_cluster CGRDEV01 -c chainlink -f ~/github/cbio-hpc/cyclecloud_projects/chainlink/templates/chainlink_nfsv4_spot.ini -p ~/github/cbio-hpc/cyclecloud_projects/clusterParamFiles/CGRDEV01.params.json
+
+
+cyclecloud project upload FMI-S3-QA
