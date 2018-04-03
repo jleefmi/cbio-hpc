@@ -1,6 +1,7 @@
 name "chainlink_execute_role"
 description "Chainlink Exec Role"
 run_list("recipe[createusers]",
+  "recipe[createusers::chown_mounts]",
   "recipe[cyclecloud]",
   "recipe[cshared::client]",
   "recipe[cuser]",
