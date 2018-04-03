@@ -119,9 +119,8 @@ CycleCloud may be installed on the new instance manually using the following scr
    cp ${INSTALL_DIR}/users_init.txt ${CS_HOME}/config/data
 
    cd ${CS_HOME}
-<<<<<<< HEAD
-   
-   ### Set ports and HTTPS ###
+
+
 
 ```
 ### Create Self Signed SSL Certificate ###
@@ -175,17 +174,17 @@ These files are specific to each operating domain and contain confidential infor
 
 ## Cloud Formation: ##
 
-Alternatively, CycleCloud may installed in Master-Slave Failover configuration using the CloudFormation template currently found in S3 at: 
+Alternatively, CycleCloud may installed in Master-Slave Failover configuration using the CloudFormation template currently found in S3 at:
 https://s3.console.aws.amazon.com/s3/buckets/fm-ae1-cyclecloud-poc/cloudformation/?region=us-east-1&tab=overview
 
 
 # Image Building: #
 
-CycleCloud users can use a stock/public image or may build their own following the instructions here: 
+CycleCloud users can use a stock/public image or may build their own following the instructions here:
 https://docs.cyclecomputing.com/administrator-guide-v6.6.0/image_reference
 
 Currently, to we use a custom AMI with Jetpack pre-installed and ENA enabled.
-To build the image: 
+To build the image:
 
   1.	Launch and instance of the desired base AMI with ENA enabled from the AWS Console
     a.	The current base image is: CentOS7 R4 w/ ENA (ami-b57350a3)
@@ -195,9 +194,9 @@ To build the image:
     a.	The current base image includes a pre-installed copy of Univa Grid Engine which should be removed
   4.	Install and software which should be pre-baked into all instances launched by CycleCloud
     a.	Currently, we pre-bake pip and the AWS CLI
-    
+
     ``` bash
-     su - 
+     su -
     yum -y update
     yum -y install epel-release
     yum install -y python-pip java-1.8.0-openjdk.x86_64
@@ -206,7 +205,7 @@ To build the image:
 
     ```
   5.	Download Jetpack (the CycleCloud Agent) and install (as root):
-  
+
   ``` bash
   export CS_VERSION=6.6.0
   mkdir /tmp/installers
@@ -223,7 +222,7 @@ To build the image:
   ```
 
 
-  6.	Clean up the instance prior to baking (as root): 
+  6.	Clean up the instance prior to baking (as root):
 
   ``` bash
   cd /tmp
@@ -237,8 +236,9 @@ To build the image:
   history -c
   ```
 
-  7.	Bake the image from the AWS Console by selecting the running Instance, right-clicking and selecting "Image -> Create Image" from the context menu. 
-  8.	Finally, register the AMI ID for the newly baked image with cyclecloud (where the Version should b (**IMPORTANT** REPLACE the ${REGION} and ${AMI_ID} in the block below with the new AMI ID and the correct Region):
+  7.	Bake the image from the AWS Console by selecting the running Instance, right-clicking and selecting "Image -> Create Image" from the context menu.
+
+  8.  Finally, register the AMI ID for the newly baked image with cyclecloud. To register the image create a new text file with extension `.txt` in `/opt/cycle_server/config/data` (for example: `/opt/cycle_server/config/data/fmi_images.txt`). Add the text in the block below to the file, replacing the ${REGION} and ${AMI_ID} with the new AMI ID and the correct Region, then save it.  After creating the file, list the directory and you should see the file extension replaced with `.imported` (if the extension is `.failed` then there is a typo in the file – correct the typo and rename the file with extension `.txt`).
 
   ``` bash
   Version = "1.0"
@@ -271,8 +271,8 @@ To build the image:
 
 The Chainlink cluster type relies on two primary CycleCloud projects:
 
-  1.	UGE 
-    a.	Installs and Configures Univa Grid Engine 
+  1.	UGE
+    a.	Installs and Configures Univa Grid Engine
   2.	Chainlink
     a.	Installs and Configures the Chainlink application
 
@@ -302,7 +302,7 @@ The Chainlink cluster type relies on two primary CycleCloud projects:
   server_side_encryption = true
   use_instance_creds = true
   ```
-    
+
   8. Make a new directory for the UGE Binaries to `/cbio-hpc/cyclecloud_projects/chainlink/specs/default/ge/` and copy the GE tarballs into it.
   9. Upload the Chainlink and UGE Projects to the new Locker:
   ``` bash
@@ -331,7 +331,7 @@ The Chainlink cluster type relies on two primary CycleCloud projects:
 
   cyclecloud start_cluster CDX_QA
   ```
-  
+
 
 
 
@@ -359,7 +359,7 @@ The basic rule of thumb is that infrastructure or software configuration changes
   - If the configuration change applies to the Master node of a UGE cluster, then it is generally safest to terminate and restart the entire cluster.
   - If the configuration change applies only to the Execute nodes, then simple terminate the execute nodes and manually re-add them or allow them to re-autostart.
     - Changes to NodeArrays do not require a terminating existing nodes if it is acceptable for a mix of new and old nodes to co-exist.
-  
+
 Changes to cluster parameters and policies often do not require a restart.   For example, it is common to modify the MaxCoreCount parameter dynamically as a run is in-progress to provide additional resources.
 
 
@@ -388,7 +388,7 @@ If the steps above, such as creating a new Cluster-Init script to apply the chan
 If you need to apply a manual change, note that some changes may be un-done by the next maintenance converge.  So, good practice is :
 
   1. First disable maintenance converges.
-  ``` bash 
+  ``` bash
   crontab -e
   # comment out the line which calls **jetpack**
   ```
@@ -409,7 +409,7 @@ In general, CycleCloud may be stopped without impact to running jobs.  There are
      b. However, this also means that your pool will eventually reduce in size until only the persistent nodes remain running.  This will impact performance of future jobs until CycleCloud is restarted.
   2. Monitoring for cost and utilization (and historical data collection) will have a gap until CycleCloud is restarted.
   3. Users attempting to view the GUI or execute commands via the CLI will see errors.
-  
+
 ### What if the CycleCloud host is Terminated? ###
 
 Although rare, it AWS instances sometimes terminate due to host failures, or need to be moved to allow host updates.  
@@ -427,7 +427,7 @@ When the CycleCloud host is terminated the following procedure should be followe
   6. Finally, start CycleCloud
      a. `/opt/cycle_server/cycle_server start`
 
-    
+
 
 
 
@@ -469,7 +469,7 @@ It is entirely reasonable to mix an match mounts in the cluster template with mo
 
 ## The Chainlink Project ##
 
-1.	Create_users Cookbook : 
+1.	Create_users Cookbook :
   a.	create_users cookbook
   i.  chown_mounts recipe
   ii.	move_localuser_home recipe
@@ -495,7 +495,7 @@ It is entirely reasonable to mix an match mounts in the cluster template with mo
   b.	Without that, app fails in hard to debug ways
 14.	Autoscale.py
   a.	Redirect highmem jobs to slot_type
-	
+
 
 ### Other Customizations: ###
 
@@ -519,7 +519,3 @@ These are some of the common issues and responses seen with the Chainlink cluste
 
 1.	A cluster configuration parameter needs to be changed on live clusters:
   a.	See the [When is are Restarts Required?](#when-is-are-restarts-required) section.
-
-
-
-
