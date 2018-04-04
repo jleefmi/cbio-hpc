@@ -1,7 +1,8 @@
 {
   "CycleClusterName" : "EFSQA03",
+  "QMasterHostname": "EfsMaster",
   "ChainlinkEnv" : "cdx_qa",
-  "ChainlinkVersion" : "1.0.5",
+  "ChainlinkVersion" : "1.0.5.hostname",
   "UgeProjectVersion" : "1.0.1",
   "InitialHighMemCount": 0,
   "MaxHighMemCount": 16,
@@ -43,7 +44,7 @@
     "subnet-8af741a7"
   ],
   "azureExecuteSubnetId": null,
-  "InitialPersistentCount": 10,
+  "InitialPersistentCount": 0,
   "InitialExecuteCoreCount": 0,
   "MaxPersistentCount": 10,
   "GridEngineVersion": "8.5.0",

@@ -2,6 +2,7 @@ name "chainlink_master_role"
 description "Chainlink Master Role"
 run_list("role[scheduler]",
   "recipe[createusers]",
+  "recipe[fmihosts::change_hostname]",
   "recipe[createusers::chown_mounts]",
   "recipe[cyclecloud]",
   "recipe[cshared::directories]",
