@@ -23,7 +23,7 @@ end
 discoverable_nodes = cluster.search()
 discoverable_nodes.each do |n|
     if not n['fmi']['hostname'].nil?
-      execute "Adding Hostname alias #{n['fmi']['hostname']} to /etc/hosts." do
+      execute "Adding Hostname alias [ #{n['cyclecloud']['instance']['ipv4']} #{n['fmi']['hostname'] + "." + domain} #{n['fmi']['hostname']} ] to /etc/hosts." do
         command "sed -i '/^\s*#{n['cyclecloud']['instance']['ipv4']} /c\ #{n['cyclecloud']['instance']['ipv4']} #{n['fmi']['hostname'] + "." + domain} #{n['fmi']['hostname']}' /etc/hosts"
       end
       
