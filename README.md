@@ -136,7 +136,7 @@ keytool -genkey \
 -keystore .keystore \
 -storepass "SelfSignedUseOnlyPlease"
 
-mv .keystore ${CS_HOME}/
+#mv .keystore ${CS_HOME}/
 chown cycle_server:cycle_server ${CS_HOME}/.keystore
 ```
 
@@ -152,7 +152,7 @@ sed -i '/^webServerEnableHttp=/c webServerEnableHttp=false' ${CS_HOME}/config/cy
 sed -i '/^webServerEnableHttps=/c webServerEnableHttps=true' ${CS_HOME}/config/cycle_server.properties
 
 ### Create the SSH Keystore ###
-/bin/keytool -genkey -keyalg RSA -sigalg SHA256withRSA -alias CycleServer -keypass "changeit" -keystore .keystore -storepass "changeit"
+#/bin/keytool -genkey -keyalg RSA -sigalg SHA256withRSA -alias CycleServer -keypass "changeit" -keystore .keystore -storepass "changeit"
 
 echo "Starting CycleCloud..."
 ${CS_HOME}/cycle_server start --wait
