@@ -1,7 +1,7 @@
 {
   "CycleClusterName" : "CGRDEV01",
   "ChainlinkEnv" : "cgr_dev",
-  "ChainlinkVersion" : "1.0.5",
+  "ChainlinkVersion" : "1.0.5-cgr1.1",
   "UgeProjectVersion" : "1.0.1",
   "InitialHighMemCount": 0,
   "MaxHighMemCount": 16,
