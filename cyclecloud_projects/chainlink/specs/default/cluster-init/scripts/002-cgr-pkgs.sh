@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo /usr/bin/pip install pandas;
+sudo /usr/bin/pip install pandas sklearn;
