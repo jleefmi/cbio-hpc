@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pip install pandas
+sudo /usr/bin/pip install pandas;
