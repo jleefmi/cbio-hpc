@@ -1,5 +1,8 @@
 {
   "CycleClusterName" : "EFSQA02",
+  "TeamTag" : "Compbio",
+  "ApplicationTag" : "Analysis Pipeline",
+  "BusinessUnitTag" : "Compbio",
   "ChainlinkEnv" : "cdx_qa",
   "ChainlinkVersion" : "1.0.4",
   "UgeProjectVersion" : "1.0.0",

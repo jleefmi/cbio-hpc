@@ -1,5 +1,8 @@
 {
   "CycleClusterName": "CLIAQA01",
+  "TeamTag" : "Compbio",
+  "ApplicationTag" : "Analysis Pipeline",
+  "BusinessUnitTag" : "Compbio",
   "ChainlinkEnv": "clia_qa",
   "ChainlinkVersion": "1.0.5",
   "InitialHighMemCount": 0,

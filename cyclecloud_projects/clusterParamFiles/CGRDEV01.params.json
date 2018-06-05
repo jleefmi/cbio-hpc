@@ -1,5 +1,8 @@
 {
   "CycleClusterName" : "CGRDEV01",
+  "TeamTag" : "Compbio",
+  "ApplicationTag" : "Analysis Pipeline",
+  "BusinessUnitTag" : "Compbio",
   "ChainlinkEnv" : "cgr_dev",
   "ChainlinkVersion" : "1.0.5-cgr1.1",
   "UgeProjectVersion" : "1.0.1",
