@@ -513,8 +513,8 @@ Autoscale = $Autoscale
       	Version=$ChainlinkVersion
 
       	[[[cluster-init env]]]
-      	Project=Chainlink
-      	Spec=$ChainlinkEnv
+      	Project=$ChainlinkEnv
+      	Spec=default
       	Version=$ChainlinkVersion
 
 
