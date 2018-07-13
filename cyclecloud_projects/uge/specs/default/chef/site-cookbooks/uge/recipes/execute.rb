@@ -37,11 +37,11 @@ sgever = node[:gridengine][:version]   # 8.2.0-demo (ge), 8.2.1 (ge), 6_2u6 (sge
 sgeroot = node[:gridengine][:root]     # /sched/ge/ge-8.2.0-demo
 
 # HACK single spec creates a dictionary, multiple specs result in an array
-if node[:cyclecloud][:specs].is_a?(Array)
-  specs = node[:cyclecloud][:specs].select { |spec| spec['project'] == "uge" }
+if node[:cyclecloud][:cluster_init_specs].is_a?(Array)
+  specs = node[:cyclecloud][:cluster_init_specs].select { |spec| spec['project'] == "uge" }
   installer_location = specs[0][:location]
 else
-  installer_location = node[:cyclecloud][:specs][:location]
+  installer_location = node[:cyclecloud][:cluster_init_specs][:location]
 end
   
 
