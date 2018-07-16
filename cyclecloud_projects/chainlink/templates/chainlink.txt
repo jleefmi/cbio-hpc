@@ -86,6 +86,10 @@ Order = 20
         [[[parameter PipelineUserGroups]]]
         Required = true
 
+        [[[parameter NTPServers]]]
+        Required = false
+        DefaultValue = ntp.corp.local, ntp01.corp.local, ntp02.corp.local
+
   [[[parameter ChainlinkEnv]]]
   Required = true
 
@@ -449,7 +453,8 @@ Autoscale = $Autoscale
         cyclecloud.hosts.simple_vpc_dns.suffix=corp.local
 
         # NTP Config
-        cyclecloud.ntp.servers = ntp.corp.local, ntp01.corp.local, ntp02.corp.local
+        ntp.servers = $NTPServers
+        cyclecloud.ntp.servers = $NTPServers
 
         # No need for fail2ban in vpc
         cyclecloud.fail2ban.enabled = false
