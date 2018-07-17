@@ -3,11 +3,13 @@
 set -x
 set -e
 
+## ENSURE THESE VARIABLES ARE CORRECT ##
+export CS_VERSION=6.8.1
+export CYCLECLOUD_LOCKER=fm-ae1-cyclecloud-poc
+##
+
 export CS_HOME=/opt/cycle_server
 export INSTALL_DIR=/tmp/cyclecloud
-
-export CS_VERSION=6.6.0
-export CYCLECLOUD_LOCKER=fm-ae1-cyclecloud-poc
 
 mkdir -p ${INSTALL_DIR}
 chmod a+rwX ${INSTALL_DIR}
