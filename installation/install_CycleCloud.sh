@@ -16,8 +16,7 @@ echo "Bootstrapping CycleCloud..."
 echo "Fetching CycleCloud Bootstrap script..."
 
 yum -y update
-yum -y install epel-release
-yum install -y python-pip java-1.8.0-openjdk.x86_64
+yum -y install epel-release unzip python-pip java-1.8.0-openjdk.x86_64
 
 pip install -U pip awscli pystache argparse python-daemon requests
 
