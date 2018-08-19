@@ -535,7 +535,7 @@ Autoscale = $Autoscale
 
         [[[configuration]]]
         # This is the Chef runlist to use for the node, to customize this add customized recipes and/or roles
-        run_list = recipe[createusers::move_localuser_home], recipe[cyclecloud], role[chainlink_master_role]
+        run_list = recipe[createusers::move_localuser_home], recipe[fmihosts::set_instance_hostname], recipe[cyclecloud], role[chainlink_master_role]
 
         gridengine.slots = $MasterSlotCount
 
@@ -579,7 +579,7 @@ Autoscale = $Autoscale
     Preemptible = ${ifThenElse(Preemptible == true, Preemptible, undefined)}
 
         [[[configuration]]]
-        run_list = recipe[createusers::move_localuser_home], recipe[cyclecloud], role[chainlink_execute_role]
+        run_list = recipe[createusers::move_localuser_home], recipe[fmihosts::set_instance_hostname], recipe[cyclecloud], role[chainlink_execute_role]
 
 
         [[[cluster-init execute]]]

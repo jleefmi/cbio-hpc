@@ -248,7 +248,21 @@ xmlrpc-c
 xmlrpc-c-client
 yajl
 yum-langpacks
-zip" > /tmp/cbio_packages.txt
+zip
+ncurses-devel
+zlib-devel
+bzip2-devel
+xz-devel
+xorg-x11-xauth
+xterm
+libICE
+libSM
+libXaw
+libXmu
+libXpm
+libXt
+gedit
+pygtk2" > /tmp/cbio_packages.txt
 
 yum install -y $(cat /tmp/cbio_packages.txt)
 
